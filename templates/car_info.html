@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Car Info</title>
+    <link rel="stylesheet" type="text/css" href="/static/style.css"> <!-- Link to CSS -->
+</head>
+<body>
+    <h2>Your Registered Vehicles</h2>
+    {% if vehicles %}
+        <div class="vehicle-container">
+            {% for vehicle in vehicles %}
+                <div class="vehicle-card">
+                    <p><strong>Type:</strong> {{ vehicle[0] }}</p>
+                    <p><strong>Plate:</strong> {{ vehicle[1] }}</p>
+                    <p><strong>Brand:</strong> {{ vehicle[2] }}</p>
+                    <p><strong>Model:</strong> {{ vehicle[3] }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>You have not registered any vehicles yet.</p>
+    {% endif %}
+    <a href="/">Back to Home</a>
+    <style>
+        .vehicle-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .vehicle-card {
+            background-color: #16213e;
+            color: #eaeaea;
+            border: 1px solid #0f3460;
+            border-radius: 8px;
+            padding: 15px;
+            width: 250px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            text-align: left;
+        }
+        .vehicle-card p {
+            margin: 5px 0;
+        }
+    </style>
+</body>
+</html>

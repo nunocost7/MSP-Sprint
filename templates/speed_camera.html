@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Speed Camera Alerts</title>
+    <link rel="stylesheet" type="text/css" href="/static/style.css"> <!-- Link to CSS -->
+</head>
+<body>
+    <h2>Speed Camera Alerts</h2>
+    <form method="post">
+        User ID: <input type="number" name="user_id" required><br>
+        Enable Alerts: 
+        <select name="enable_alerts" required>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+        </select><br>
+        <button type="submit">Save Settings</button>
+    </form>
+    <h3>Test Speed Alert</h3>
+    <form onsubmit="event.preventDefault(); checkSpeedAlert();">
+        Current Speed (km/h): <input type="number" id="user_speed" required><br>
+        Speed Limit (km/h): <input type="number" id="speed_limit" required><br>
+        <button type="submit">Check Speed Alert</button>
+    </form>
+    <a href="/">Back to Home</a>
+    <script>
+        async function checkSpeedAlert() {
+            const userSpeed = parseFloat(document.getElementById("user_speed").value);
+            const speedLimit = parseFloat(document.getElementById("speed_limit").value);
+
+            if (isNaN(userSpeed) || isNaN(speedLimit)) {
+                alert("Please enter valid speed values.");
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/speed_alert', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_speed: userSpeed, speed_limit: speedLimit })
+                });
+
+                const data = await response.json();
+                alert(data.alert);
+            } catch (error) {
+                console.error("Error checking speed alert:", error);
+                alert("An error occurred while checking the speed alert.");
+            }
+        }
+    </script>
+</body>
+</html>

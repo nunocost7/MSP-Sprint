@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Define Route</title>
+    <link rel="stylesheet" type="text/css" href="/static/style.css"> <!-- Link to CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" /> <!-- Leaflet CSS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script> <!-- Leaflet JS -->
+    <script>
+        let map, routeLayer;
+
+        function initMap() {
+            map = L.map('map').setView([37.7749, -122.4194], 13); // Default to San Francisco
+
+            // Add OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            // Initialize a layer for the route
+            routeLayer = L.layerGroup().addTo(map);
+        }
+
+        async function calculateRoute() {
+            console.log("Entered calculateRoute function");  // Debugging
+            const origin = document.getElementById("origin").value;
+            const destination = document.getElementById("destination").value;
+            const userSpeed = parseFloat(document.getElementById("user_speed").value);
+
+            console.log(`Origin: ${origin}, Destination: ${destination}, User Speed: ${userSpeed}`);  // Debugging
+
+            if (!origin || !destination) {
+                alert("Please enter both origin and destination.");
+                return;
+            }
+
+            if (isNaN(userSpeed)) {
+                alert("Please enter a valid speed.");
+                return;
+            }
+
+            try {
+                // Use Nominatim API to geocode origin and destination
+                const [originData, destinationData] = await Promise.all([
+                    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(origin)}`).then(res => res.json()),
+                    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(destination)}`).then(res => res.json())
+                ]);
+
+                console.log("Geocoded origin data:", originData);  // Debugging
+                console.log("Geocoded destination data:", destinationData);  // Debugging
+
+                if (!originData[0] || !destinationData[0]) {
+                    alert("Could not find one or both locations.");
+                    return;
+                }
+
+                const originCoords = `${originData[0].lon},${originData[0].lat}`;
+                const destinationCoords = `${destinationData[0].lon},${destinationData[0].lat}`;
+
+                console.log(`Origin coordinates: ${originCoords}, Destination coordinates: ${destinationCoords}`);  // Debugging
+
+                // Call the Flask backend to get the route
+                const routeResponse = await fetch(`/api/route?start=${originCoords}&end=${destinationCoords}`);
+                const routeData = await routeResponse.json();
+
+                console.log("Route data from backend:", routeData);  // Debugging
+
+                if (routeData.error) {
+                    alert(`Error: ${routeData.error}`);
+                    return;
+                }
+
+                // Extract coordinates from the response
+                if (routeData.route.features) {
+                    const coordinates = routeData.route.features[0].geometry.coordinates.map(coord => [coord[1], coord[0]]);
+                    console.log("Route coordinates:", coordinates);  // Debugging
+                    routeLayer.clearLayers(); // Clear previous route
+                    L.polyline(coordinates, { color: 'blue' }).addTo(routeLayer);
+                    map.fitBounds(L.polyline(coordinates).getBounds());
+
+                    // Display distance, duration, and ETA
+                    const distanceKm = (routeData.distance / 1000).toFixed(2);
+                    const durationMinutes = (routeData.duration / 60).toFixed(2);
+                    const currentTime = new Date();
+                    const etaTime = new Date(currentTime.getTime() + routeData.duration * 1000);
+                    const etaFormatted = etaTime.toLocaleString();
+
+                    console.log(`Distance: ${distanceKm} km, Duration: ${durationMinutes} minutes, ETA: ${etaFormatted}`);  // Debugging
+
+                    document.getElementById("distance").textContent = `Distance: ${distanceKm} km`;
+                    document.getElementById("duration").textContent = `Duration: ${durationMinutes} minutes`;
+                    document.getElementById("eta").textContent = `ETA: ${etaFormatted}`;
+
+                    // Check if the user is speeding
+                    const speedLimit = routeData.speed_limit || 50; // Default to 50 km/h if no speed limit is available
+                    console.log(`User Speed: ${userSpeed}, Speed Limit: ${speedLimit}`);  // Debugging
+                    if (userSpeed > speedLimit) {
+                        alert("You are speeding! Slow down.");
+                    } else {
+                        alert("You are within the speed limit.");
+                    }
+                } else {
+                    alert("Could not calculate route.");
+                }
+            } catch (error) {
+                console.error("Error in calculateRoute:", error);  // Debugging
+                alert("An error occurred while calculating the route.");
+            }
+        }
+    </script>
+</head>
+<body onload="initMap()">
+    <h2>Define Route</h2>
+    <form onsubmit="event.preventDefault(); calculateRoute();">
+        Origin: <input type="text" id="origin" placeholder="Enter origin" required><br>
+        Destination: <input type="text" id="destination" placeholder="Enter destination" required><br>
+        Current Speed (km/h): <input type="number" id="user_speed" placeholder="Enter your current speed" required><br>
+        <button type="submit">Show Route</button>
+    </form>
+    <div id="map" style="width: 100%; height: 500px; margin-top: 20px;"></div>
+    <div id="route-info" style="margin-top: 20px;">
+        <p id="distance"></p>
+        <p id="duration"></p>
+        <p id="eta"></p>
+    </div>
+    <a href="/">Back to Home</a>
+</body>
+</html>

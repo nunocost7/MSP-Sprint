@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MyWaze</title>
+    <link rel="stylesheet" type="text/css" href="/static/style.css"> <!-- Link to CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome for icons -->
+</head>
+<body>
+    <header>
+        <div class="top-right">
+            {% if session.get('logged_in') %}
+                <span>Welcome, {{ session['user_email'] }}</span>
+                <a href="/logout" class="login-button">Logout</a>
+            {% else %}
+                <a href="/login" class="login-button">Login</a>
+            {% endif %}
+        </div>
+        <h1>MyWaze</h1>
+    </header>
+    <main>
+        <div class="menu-grid">
+            {% if not session.get('logged_in') %}
+            <div class="menu-item">
+                <a href="/register">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Register Account</span>
+                </a>
+            </div>
+            {% endif %}
+            {% if session.get('logged_in') %}
+            <div class="menu-item">
+                <a href="/vehicle">
+                    <i class="fas fa-car"></i>
+                    <span>Register Vehicle</span>
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="/car_info">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Car Info</span>
+                </a>
+            </div>
+            {% endif %}
+            <div class="menu-item">
+                <a href="/route">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <span>Define Route</span>
+                </a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

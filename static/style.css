@@ -1,0 +1,185 @@
+/* Add your styles here */
+body {
+    font-family: Arial, sans-serif; /* Revert to previous font */
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center;
+    justify-content: center; /* Center content vertically */
+    height: 100vh; /* Full viewport height */
+    margin: 0;
+    background-color: #1a1a2e; /* Deep navy background */
+    color: #eaeaea; /* Softer light text */
+}
+
+header {
+    text-align: center;
+    margin: 20px 0; /* Add spacing around the title */
+}
+
+header h1 {
+    font-size: 150px; /* Keep the large font size */
+    font-weight: bold;
+    font-style: italic; /* Make the title italic */
+    margin-bottom: 0; /* Remove extra spacing below the title */
+}
+
+.center-container {
+    text-align: center;
+    width: 100%;
+    max-width: 500px; /* Limit the width for better centering */
+    padding: 20px;
+    box-sizing: border-box;
+    flex-grow: 1; /* Allow the container to take up remaining space */
+}
+
+h1, h2 {
+    color: #00aaff; /* Bright modern blue for headings */
+}
+
+form {
+    margin-top: 10px;
+    background-color: #16213e; /* Slightly lighter navy for forms */
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+    border: 1px solid #0f3460; /* Subtle border */
+}
+
+input, button {
+    background-color: #0f3460; /* Darker blue for inputs and buttons */
+    color: #eaeaea; /* Softer light text */
+    border: 1px solid #00aaff; /* Accent border */
+    border-radius: 4px;
+    padding: 8px;
+    margin-top: 10px;
+}
+
+input:focus, button:focus {
+    outline: none;
+    border-color: #00d4ff; /* Brighter blue highlight on focus */
+}
+
+button {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #1b4f72; /* Slightly lighter blue on hover */
+}
+
+a {
+    color: #00d4ff; /* Brighter blue for links */
+    text-decoration: none;
+}
+
+a:hover {
+    color: #eaeaea; /* Softer light text on hover */
+}
+
+main {
+    display: flex;
+    justify-content: center; /* Center the grid horizontally */
+    align-items: center; /* Center the grid vertically */
+    flex-grow: 1; /* Allow the main container to grow and fill the space */
+    height: calc(100vh - 150px); /* Adjust height to account for the title */
+    width: 100%; /* Take full width of the page */
+}
+
+.navigation-list {
+    list-style-type: none;
+    padding-left: 0; /* Remove default padding */
+}
+
+.navigation-list li {
+    margin: 15px 0; /* Increase spacing between options */
+}
+
+.navigation-list a {
+    font-size: 18px;
+    font-weight: bold;
+    color: #00d4ff; /* Brighter blue for links */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.navigation-list a:hover {
+    color: #eaeaea; /* Softer light text on hover */
+}
+
+footer {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #6c757d; /* Subtle gray for footer text */
+}
+
+.menu-grid {
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap if needed */
+    justify-content: center; /* Center items horizontally */
+    gap: 20px; /* Add consistent spacing between items */
+    padding: 20px; /* Add padding around the grid */
+}
+
+.menu-item {
+    background-color: #0f3460; /* Darker blue for menu items */
+    border-radius: 12px;
+    width: 200px; /* Fixed width for uniform buttons */
+    height: 200px; /* Fixed height for uniform buttons */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-align: center;
+}
+
+.menu-item:hover {
+    background-color: #1b4f72; /* Slightly lighter blue on hover */
+    transform: translateY(-5px); /* Lift effect on hover */
+}
+
+.menu-item a {
+    text-decoration: none;
+    color: #eaeaea; /* Softer light text */
+    font-size: 18px; /* Larger font size for text */
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px; /* Space between icon and text */
+}
+
+.menu-item a i {
+    font-size: 64px; /* Larger icon size */
+    color: #00d4ff; /* Brighter blue for icons */
+}
+
+.menu-item a:hover i {
+    color: #eaeaea; /* Softer light text on hover */
+}
+
+.top-right {
+    position: absolute;
+    top: 35px; /* Move further down from the top */
+    right: 35px; /* Move further away from the right */
+}
+
+.login-button {
+    background-color: #1b4f72; /* Slightly lighter blue */
+    color: #eaeaea; /* Softer light text */
+    border: none;
+    border-radius: 16px;;
+    padding: 12px 24px; /* Increased padding for a larger button */
+    font-size: 19px; /* Increased font size for better readability */
+    text-decoration: none;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+    background-color: #0f3460; /* Darker blue on hover */
+    color: #00d4ff; /* Brighter blue text on hover */
+}
